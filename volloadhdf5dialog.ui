@@ -74,5 +74,21 @@
     </hint>
    </hints>
   </connection>
+  <connection>
+   <sender>datasets</sender>
+   <signal>doubleClicked(QModelIndex)</signal>
+   <receiver>Dialog</receiver>
+   <slot>accept()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>131</x>
+     <y>131</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>131</x>
+     <y>149</y>
+    </hint>
+   </hints>
+  </connection>
  </connections>
 </ui>
