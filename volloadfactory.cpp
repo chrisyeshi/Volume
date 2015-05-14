@@ -3,13 +3,15 @@
 #include <string>
 #include "volloadpvm.h"
 #include "volloadhdf5.h"
+#include "volloadraw.h"
 
 namespace yy
 {
 
 std::map<std::string, VolLoadFactory::CreateFunc> VolLoadFactory::creators
- = { { "pvm", VolLoadPVM::create },
-     { "h5", VolLoadHDF5::create } };
+ = { { "pvm",  VolLoadPVM::create },
+     {  "h5", VolLoadHDF5::create },
+     { "raw",  VolLoadRAW::create } };
 
 std::set<std::string> VolLoadFactory::extensions()
 {

@@ -29,6 +29,7 @@ public:
     unsigned int nBytesPerVoxel() const;
     unsigned int nBytes() const;
     const std::unique_ptr<unsigned char []>& getData() const { return data; }
+    void normalized();
 
 protected:
 

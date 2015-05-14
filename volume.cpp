@@ -2,6 +2,8 @@
 #include <cassert>
 #include <map>
 #include <unordered_map>
+#include <functional>
+#include <limits>
 
 namespace yy
 {
@@ -59,6 +61,52 @@ unsigned int Volume::nBytesPerVoxel() const
 unsigned int Volume::nBytes() const
 {
     return width * height * depth * nBytesPerVoxel();
+}
+
+template <typename T, bool isFloat>
+static void tNormalize(unsigned char* data, int w, int h, int d)
+{
+    T* ptr = reinterpret_cast<T*>(data);
+    // get statistics
+    T maxVal = std::numeric_limits<T>::lowest();
+    T minVal = std::numeric_limits<T>::max();
+    for (int z = 0; z < d; ++z)
+    for (int y = 0; y < h; ++y)
+    for (int x = 0; x < w; ++x)
+    {
+        int index = w * h * z + w * y + x;
+        T value = ptr[index];
+        maxVal = std::max(value, maxVal);
+        minVal = std::min(value, minVal);
+    }
+    // normalize
+    for (int z = 0; z < d; ++z)
+    for (int y = 0; y < h; ++y)
+    for (int x = 0; x < w; ++x)
+    {
+        int index = w * h * z + w * y + x;
+        T value = ptr[index];
+        T newVal;
+        if (isFloat)
+            newVal = (value - minVal) / (maxVal - minVal);
+        else {
+            T lowest = std::numeric_limits<T>::lowest();
+            T highest = std::numeric_limits<T>::max();
+            newVal = double(value - minVal) / double(maxVal - minVal) * double(highest - lowest) + lowest;
+        }
+        ptr[index] = newVal;
+    }
+}
+
+void Volume::normalized()
+{
+    static std::map<Volume::DataType, std::function<void(unsigned char*, int, int, int)> > dt2func
+            = { { Volume::DT_Unsigned_Char, tNormalize<unsigned char, false> },
+                { Volume::DT_Char, tNormalize<char, false> },
+                { Volume::DT_Float, tNormalize<float, true> },
+                { Volume::DT_Double, tNormalize<double, true> } };
+    assert(dt2func.count(dataType) > 0);
+    dt2func[dataType](data.get(), width, height, depth);
 }
 
 std::ostream& operator<<(std::ostream &os, const Volume &volume)

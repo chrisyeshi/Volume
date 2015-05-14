@@ -33,7 +33,7 @@ std::shared_ptr<Volume> VolLoadHDF5::open()
         }, NULL);
     // a dialog for user to select dataset by name
     QDialog dialog;
-    Ui::Dialog ui;
+    Ui::VolLoadHDF5Dialog ui;
     ui.setupUi(&dialog);
     // add dataset names to the list widget
     for (auto name : names)
