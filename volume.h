@@ -4,12 +4,21 @@
 #include <memory>
 #include <iostream>
 
-namespace yy
-{
+namespace yy {
 
 class Volume
 {
 public:
+    // struct Stats holds statistics of the volumetric data in normalized format,
+    // so mean 0.5 in dataType unsigned char is 128.
+    struct Stats
+    {
+        Stats() : sum(0.0), mean(0.0) {}
+        friend std::ostream& operator<<(std::ostream& out, const Stats& stats);
+        std::pair<double, double> range;
+        double sum, mean;
+    };
+
     enum DataType { DT_Unsigned_Char, DT_Char, DT_Float, DT_Double };
     Volume(std::unique_ptr<unsigned char[]>& data, DataType type,
            int width, int height, int depth,
@@ -28,6 +37,7 @@ public:
     DataType pixelType() const { return dataType; }
     unsigned int nBytesPerVoxel() const;
     unsigned int nBytes() const;
+    const Stats& getStats() const { return stats; }
     const std::unique_ptr<unsigned char []>& getData() const { return data; }
     void normalized();
 
@@ -38,6 +48,9 @@ private:
     DataType dataType;
     int width, height, depth;
     float scaleX, scaleY, scaleZ;
+    Stats stats;
+
+    void computeStats();
 
     Volume(const Volume&); // Not implemented!!
     Volume& operator=(const Volume&); // Not implemented!!
