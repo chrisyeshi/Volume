@@ -4,6 +4,7 @@
 #include <unordered_map>
 #include <functional>
 #include <limits>
+#include <algorithm>
 
 namespace yy
 {
