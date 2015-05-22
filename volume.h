@@ -6,7 +6,7 @@
 
 namespace yy {
 
-class Volume
+class IVolume
 {
 public:
     // struct Stats holds statistics of the volumetric data in normalized format,
@@ -18,9 +18,26 @@ public:
         std::pair<double, double> range;
         double sum, mean;
     };
-
     enum DataType { DT_Unsigned_Char, DT_Char, DT_Float, DT_Double };
-    Volume() {}
+
+    virtual ~IVolume() {}
+    virtual int w() const = 0;
+    virtual int h() const = 0;
+    virtual int d() const = 0;
+    virtual float sx() const = 0;
+    virtual float sy() const = 0;
+    virtual float sz() const = 0;
+    virtual DataType pixelType() const = 0;
+    virtual unsigned int nBytesPerVoxel() const = 0;
+    virtual unsigned int nBytes() const = 0;
+    virtual const Stats& getStats() const = 0;
+    virtual const std::unique_ptr<unsigned char []>& getData() const = 0;
+    virtual void normalized() = 0;
+};
+
+class Volume : public IVolume
+{
+public:
     Volume(std::unique_ptr<unsigned char[]>& data, DataType type,
            int width, int height, int depth,
            float scaleX = 1.f, float scaleY = 1.f, float scaleZ = 1.f);
