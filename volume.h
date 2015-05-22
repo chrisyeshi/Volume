@@ -20,26 +20,27 @@ public:
     };
 
     enum DataType { DT_Unsigned_Char, DT_Char, DT_Float, DT_Double };
+    Volume() {}
     Volume(std::unique_ptr<unsigned char[]>& data, DataType type,
            int width, int height, int depth,
            float scaleX = 1.f, float scaleY = 1.f, float scaleZ = 1.f);
     Volume(Volume&& volume);
     Volume& operator=(Volume&& volume);
-    ~Volume();
+    virtual ~Volume();
 
     friend std::ostream& operator<<(std::ostream& os, const Volume& volume);
-    int w() const { return width; }
-    int h() const { return height; }
-    int d() const { return depth; }
-    float sx() const { return scaleX; }
-    float sy() const { return scaleY; }
-    float sz() const { return scaleZ; }
-    DataType pixelType() const { return dataType; }
-    unsigned int nBytesPerVoxel() const;
-    unsigned int nBytes() const;
-    const Stats& getStats() const { return stats; }
-    const std::unique_ptr<unsigned char []>& getData() const { return data; }
-    void normalized();
+    virtual int w() const { return width; }
+    virtual int h() const { return height; }
+    virtual int d() const { return depth; }
+    virtual float sx() const { return scaleX; }
+    virtual float sy() const { return scaleY; }
+    virtual float sz() const { return scaleZ; }
+    virtual DataType pixelType() const { return dataType; }
+    virtual unsigned int nBytesPerVoxel() const;
+    virtual unsigned int nBytes() const;
+    virtual const Stats& getStats() const { return stats; }
+    virtual const std::unique_ptr<unsigned char []>& getData() const { return data; }
+    virtual void normalized();
 
 protected:
 
