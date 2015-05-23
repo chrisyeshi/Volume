@@ -1,5 +1,6 @@
 #include "volloadrawdialog.h"
 #include "ui_volloadrawdialog.h"
+#include <sstream>
 #include <unordered_map>
 #include <cassert>
 #include <QLocale>
@@ -32,9 +33,9 @@ VolLoadRAWDialog::~VolLoadRAWDialog()
     delete ui;
 }
 
-void VolLoadRAWDialog::setFileSize(int bytes)
+void VolLoadRAWDialog::setFileSize(size_t bytes)
 {
-    ui->filesize->setText(QLocale().toString(bytes));
+    ui->filesize->setText(QLocale().toString(qlonglong(bytes)));
 }
 
 int VolLoadRAWDialog::w() const
@@ -87,25 +88,25 @@ void VolLoadRAWDialog::disconWHD()
 ////    disconnect(ui->x, SIGNAL(valueChanged(int)), ui->z, SLOT(setValue(int)));
 //}
 
-int VolLoadRAWDialog::bytes() const
+size_t VolLoadRAWDialog::bytes() const
 {
     QString typeText = ui->type->currentItem()->text();
-    int x = ui->x->value();
-    int y = ui->y->value();
-    int z = ui->z->value();
-    static std::unordered_map<std::string, int> type2size
+    size_t x = ui->x->value();
+    size_t y = ui->y->value();
+    size_t z = ui->z->value();
+    static std::unordered_map<std::string, size_t> type2size
             = { { "unsigned byte (char)", sizeof(unsigned char) },
                 { "byte (char)", sizeof(char) },
                 { "float", sizeof(float) },
                 { "double", sizeof(double) } };
-    int size = type2size[typeText.toStdString()];
-    int volbytes = x * y * z * size;
+    size_t size = type2size[typeText.toStdString()];
+    size_t volbytes = x * y * z * size;
     return volbytes;
 }
 
 void VolLoadRAWDialog::updateEstimate()
 {
-    ui->estimate->setText(QLocale().toString(bytes()));
+    ui->estimate->setText(QLocale().toString(qlonglong(bytes())));
 }
 
 } // namespace yy

@@ -27,7 +27,7 @@ std::shared_ptr<Volume> VolLoadRAW::open()
     std::ifstream fin(filename.c_str(), std::ifstream::binary | std::ifstream::ate);
     if (!fin) return nullptr;
     // get file size
-    int filesize = fin.tellg();
+    size_t filesize = fin.tellg();
     fin.seekg(std::ios::beg);
     // modal dialog
     yy::VolLoadRAWDialog dialog;

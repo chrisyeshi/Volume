@@ -18,8 +18,8 @@ public:
     explicit VolLoadRAWDialog(QWidget *parent = 0);
     ~VolLoadRAWDialog();
 
-    void setFileSize(int bytes);
-    int bytes() const;
+    void setFileSize(size_t bytes);
+    size_t bytes() const;
     int w() const;
     int h() const;
     int d() const;
