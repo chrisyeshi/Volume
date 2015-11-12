@@ -71,23 +71,6 @@ void VolLoadRAWDialog::disconWHD()
     disconnect(ui->x, SIGNAL(valueChanged(int)), ui->z, SLOT(setValue(int)));
 }
 
-//void VolLoadRAWDialog::onWValueChanged(int w)
-//{
-
-//}
-
-//void VolLoadRAWDialog::onHValueChanged(int h)
-//{
-////    disconnect(ui->x, SIGNAL(valueChanged(int)), ui->y, SLOT(setValue(int)));
-////    disconnect(ui->x, SIGNAL(valueChanged(int)), ui->z, SLOT(setValue(int)));
-//}
-
-//void VolLoadRAWDialog::onDValueChanged(int d)
-//{
-////    disconnect(ui->x, SIGNAL(valueChanged(int)), ui->y, SLOT(setValue(int)));
-////    disconnect(ui->x, SIGNAL(valueChanged(int)), ui->z, SLOT(setValue(int)));
-//}
-
 size_t VolLoadRAWDialog::bytes() const
 {
     QString typeText = ui->type->currentItem()->text();

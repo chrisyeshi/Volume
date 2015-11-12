@@ -26,9 +26,6 @@ public:
     Volume::DataType type() const;
 
 private slots:
-//    void onWValueChanged(int w);
-//    void onHValueChanged(int h);
-//    void onDValueChanged(int d);
     void disconWHD();
     void updateEstimate();
 
