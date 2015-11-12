@@ -42,4 +42,20 @@ std::shared_ptr<Volume> VolLoadRAW::open()
     return volume;
 }
 
+std::shared_ptr<Volume> VolLoadRAW::open(IVolume::DataType type, int w, int h, int d)
+{
+    std::ifstream fin(filename.c_str(), std::ifstream::binary);
+    if (!fin) return nullptr;
+    std::map<IVolume::DataType, size_t> type2size
+            = { { IVolume::DT_Char, sizeof(char) },
+                { IVolume::DT_Unsigned_Char, sizeof(unsigned char) },
+                { IVolume::DT_Float, sizeof(float) },
+                { IVolume::DT_Double, sizeof(double) } };
+    size_t bytes = w * h * d * type2size[type];
+    std::unique_ptr<unsigned char[]> data(new unsigned char [bytes]);
+    fin.read(reinterpret_cast<char*>(data.get()), bytes);
+    auto volume = std::make_shared<Volume>(data, type, w, h, d, 1, 1, 1);
+    return volume;
+}
+
 } // namespace yy
