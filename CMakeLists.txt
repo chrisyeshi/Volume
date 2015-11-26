@@ -2,7 +2,7 @@ cmake_minimum_required(VERSION 3.1.0 FATAL_ERROR)
 
 find_package(Qt5Core REQUIRED)
 find_package(Qt5Widgets REQUIRED)
-find_package(HDF5 NAMES hdf5 REQUIRED)
+# find_package(HDF5 NAMES hdf5 REQUIRED)
 include_directories(${HDF5_INCLUDE_DIR})
 
 file(GLOB SOURCES *.cpp)

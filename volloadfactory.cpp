@@ -10,7 +10,7 @@ namespace yy
 
 std::map<std::string, VolLoadFactory::CreateFunc> VolLoadFactory::creators
  = { { "pvm",  VolLoadPVM::create },
-     {  "h5", VolLoadHDF5::create },
+//     {  "h5", VolLoadHDF5::create },
      { "raw",  VolLoadRAW::create },
      { "data", VolLoadRAW::create } };
 
