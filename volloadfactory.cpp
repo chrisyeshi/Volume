@@ -2,7 +2,9 @@
 #include <map>
 #include <string>
 #include "volloadpvm.h"
-#include "volloadhdf5.h"
+#ifdef ENABLE_HDF5
+    #include "volloadhdf5.h"
+#endif // ENABLE_HDF5
 #include "volloadraw.h"
 
 namespace yy
@@ -10,7 +12,9 @@ namespace yy
 
 std::map<std::string, VolLoadFactory::CreateFunc> VolLoadFactory::creators
  = { { "pvm",  VolLoadPVM::create },
-//     {  "h5", VolLoadHDF5::create },
+#ifdef ENABLE_HDF5
+     {  "h5", VolLoadHDF5::create },
+#endif // ENABLE_HDF5
      { "raw",  VolLoadRAW::create },
      { "dat",  VolLoadRAW::create },
      { "data", VolLoadRAW::create } };

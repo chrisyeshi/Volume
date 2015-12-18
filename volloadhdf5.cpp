@@ -1,4 +1,3 @@
-/*
 #include "volloadhdf5.h"
 #include <QSharedPointer>
 #include <QDialog>
@@ -56,4 +55,3 @@ std::shared_ptr<Volume> VolLoadHDF5::open()
 }
 
 } // namespace yy
-*/

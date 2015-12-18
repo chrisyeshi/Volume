@@ -1,13 +1,26 @@
 cmake_minimum_required(VERSION 3.1.0 FATAL_ERROR)
 
+set(ENABLE_HDF5 ON CACHE BOOL "Enable HDF5 modules")
+
+if(${ENABLE_HDF5})
+    add_definitions(-DENABLE_HDF5)
+    find_package(HDF5 NAMES hdf5 REQUIRED)
+endif(${ENABLE_HDF5})
 find_package(Qt5Core REQUIRED)
 find_package(Qt5Widgets REQUIRED)
-# find_package(HDF5 NAMES hdf5 REQUIRED)
 include_directories(${HDF5_INCLUDE_DIR})
 
 file(GLOB SOURCES *.cpp)
 file(GLOB HEADERS *.h)
 file(GLOB UI_FILES *.ui)
+if(NOT ${ENABLE_HDF5})
+    file(GLOB SOURCES_HDF5 *hdf5*.cpp)
+    file(GLOB HEADERS_HDF5 *hdf5*.h)
+    file(GLOB UIFILES_HDF5 *hdf5*.ui)
+    list(REMOVE_ITEM SOURCES ${SOURCES_HDF5})
+    list(REMOVE_ITEM HEADERS ${HEADERS_HDF5})
+    list(REMOVE_ITEM UI_FILES ${UIFILES_HDF5})
+endif(NOT ${ENABLE_HDF5})
 
 qt5_wrap_ui(UI_HEADERS ${UI_FILES})
 add_library(volume ${SOURCES} ${HEADERS} ${UI_HEADERS})

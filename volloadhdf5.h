@@ -1,4 +1,3 @@
-/*
 #ifndef VOLLOADHDF5_H
 #define VOLLOADHDF5_H
 
@@ -24,4 +23,3 @@ private:
 } // namespace yy
 
 #endif // VOLLOADHDF5_H
-*/
