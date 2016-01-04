@@ -6,6 +6,7 @@
     #include "volloadhdf5.h"
 #endif // ENABLE_HDF5
 #include "volloadraw.h"
+#include "volloadhdr.h"
 
 namespace yy
 {
@@ -17,15 +18,14 @@ std::map<std::string, VolLoadFactory::CreateFunc> VolLoadFactory::creators
 #endif // ENABLE_HDF5
      { "raw",  VolLoadRAW::create },
      { "dat",  VolLoadRAW::create },
-     { "data", VolLoadRAW::create } };
+     { "data", VolLoadRAW::create },
+     { "hdr",  VolLoadHDR::create } };
 
 std::set<std::string> VolLoadFactory::extensions()
 {
     std::set<std::string> ret;
     for (auto entry : creators)
-    {
         ret.insert(entry.first);
-    }
     return ret;
 }
 
