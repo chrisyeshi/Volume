@@ -53,13 +53,13 @@ int VolLoadRAWDialog::d() const
     return ui->z->value();
 }
 
-Volume::DataType VolLoadRAWDialog::type() const
+Volume::ScalarType VolLoadRAWDialog::type() const
 {
-    static std::unordered_map<std::string, Volume::DataType> type
-            = { { "unsigned byte (char)", Volume::DT_Unsigned_Char },
-                { "byte (char)", Volume::DT_Char },
-                { "float", Volume::DT_Float },
-                { "double", Volume::DT_Double } };
+    static std::unordered_map<std::string, Volume::ScalarType> type
+            = { { "unsigned byte (char)", Volume::ST_Unsigned_Char },
+                { "byte (char)", Volume::ST_Char },
+                { "float", Volume::ST_Float },
+                { "double", Volume::ST_Double } };
     std::string typeText = ui->type->currentItem()->text().toStdString();
     assert(type.count(typeText) > 0);
     return type[typeText];

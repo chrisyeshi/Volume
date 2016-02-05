@@ -16,9 +16,10 @@ std::ostream& operator<<(std::ostream& out, const Volume::Stats& stats)
     return out;
 }
 
-Volume::Volume(std::unique_ptr<unsigned char[]>& data, DataType type, int width, int height, int depth, float scaleX, float scaleY, float scaleZ)
+Volume::Volume(std::unique_ptr<unsigned char[]>& data, ScalarType type, unsigned int nScalarsPerVoxel, int width, int height, int depth, float scaleX, float scaleY, float scaleZ)
  : data(nullptr)
  , dataType(type)
+ , nvScalars(nScalarsPerVoxel)
  , width(width), height(height), depth(depth)
  , scaleX(scaleX), scaleY(scaleY), scaleZ(scaleZ)
 {
@@ -58,31 +59,26 @@ Volume::~Volume()
 
 std::ostream& operator<<(std::ostream &os, const Volume &volume)
 {
-    static std::map<Volume::DataType, std::string> dt2str
-            = {{Volume::DT_Double, "Double"},
-               {Volume::DT_Float, "Float"},
-               {Volume::DT_Unsigned_Char, "Unsigned char"},
-               {Volume::DT_Char, "Char"}};
+    static std::map<Volume::ScalarType, std::string> dt2str
+            = {{Volume::ST_Double, "Double"},
+               {Volume::ST_Float, "Float"},
+               {Volume::ST_Unsigned_Char, "Unsigned char"},
+               {Volume::ST_Char, "Char"}};
     assert(0 != dt2str.count(volume.dataType));
     os << "Volume (type: " << dt2str[volume.dataType].c_str()
        << ") (size: [" << volume.width << "," << volume.height << "," << volume.depth << "])";
     return os;
 }
 
-unsigned int Volume::nBytesPerVoxel() const
+unsigned int Volume::nBytesPerScalar() const
 {
-    static std::map<DataType, unsigned int> dt2bytes
-            = { { DT_Unsigned_Char, sizeof(unsigned char) }
-              , { DT_Char, sizeof(char) }
-              , { DT_Float, sizeof(float) }
-              , { DT_Double, sizeof(double) } };
-    assert(dt2bytes.count(pixelType()) > 0);
-    return dt2bytes[pixelType()];
-}
-
-unsigned int Volume::nBytes() const
-{
-    return width * height * depth * nBytesPerVoxel();
+    static std::map<ScalarType, unsigned int> dt2bytes
+            = { { ST_Unsigned_Char, sizeof(unsigned char) }
+              , { ST_Char, sizeof(char) }
+              , { ST_Float, sizeof(float) }
+              , { ST_Double, sizeof(double) } };
+    assert(dt2bytes.count(scalarType()) > 0);
+    return dt2bytes[scalarType()];
 }
 
 template <typename T, bool isFloat>
@@ -114,11 +110,11 @@ static void tNormalize(unsigned char* data, int w, int h, int d, Volume::Stats s
 
 void Volume::normalized()
 {
-    static std::map<Volume::DataType, std::function<void(unsigned char*, int, int, int, Volume::Stats)> > dt2func
-            = { { Volume::DT_Unsigned_Char, tNormalize<unsigned char, false> },
-                { Volume::DT_Char,          tNormalize<char, false> },
-                { Volume::DT_Float,         tNormalize<float, true> },
-                { Volume::DT_Double,        tNormalize<double, true> } };
+    static std::map<Volume::ScalarType, std::function<void(unsigned char*, int, int, int, Volume::Stats)> > dt2func
+            = { { Volume::ST_Unsigned_Char, tNormalize<unsigned char, false> },
+                { Volume::ST_Char,          tNormalize<char, false> },
+                { Volume::ST_Float,         tNormalize<float, true> },
+                { Volume::ST_Double,        tNormalize<double, true> } };
     assert(dt2func.count(dataType) > 0);
     dt2func[dataType](data.get(), width, height, depth, stats);
 }
@@ -161,11 +157,11 @@ static Volume::Stats tComputeStats(unsigned char* data, int w, int h, int d)
 
 void Volume::computeStats()
 {
-    static std::map<Volume::DataType, std::function<Stats(unsigned char*, int, int, int)> > dt2func
-            = { { Volume::DT_Unsigned_Char, tComputeStats<unsigned char, false> },
-                { Volume::DT_Char,          tComputeStats<char, false> },
-                { Volume::DT_Float,         tComputeStats<float, true> },
-                { Volume::DT_Double,        tComputeStats<double, true> } };
+    static std::map<Volume::ScalarType, std::function<Stats(unsigned char*, int, int, int)> > dt2func
+            = { { Volume::ST_Unsigned_Char, tComputeStats<unsigned char, false> },
+                { Volume::ST_Char,          tComputeStats<char, false> },
+                { Volume::ST_Float,         tComputeStats<float, true> },
+                { Volume::ST_Double,        tComputeStats<double, true> } };
     assert(dt2func.count(dataType) > 0);
     stats = dt2func[dataType](data.get(), width, height, depth);
 

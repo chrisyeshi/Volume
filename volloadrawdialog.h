@@ -23,7 +23,7 @@ public:
     int w() const;
     int h() const;
     int d() const;
-    Volume::DataType type() const;
+    Volume::ScalarType type() const;
 
 private slots:
     void disconWHD();

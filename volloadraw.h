@@ -15,7 +15,7 @@ public:
     virtual ~VolLoadRAW();
 
     virtual std::shared_ptr<Volume> open();
-    std::shared_ptr<Volume> open(IVolume::DataType type, int w, int h, int d);
+    std::shared_ptr<Volume> open(IVolume::ScalarType type, int w, int h, int d);
 
 private:
     std::string filename;

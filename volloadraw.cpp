@@ -38,23 +38,23 @@ std::shared_ptr<Volume> VolLoadRAW::open()
     // get results
     std::unique_ptr<unsigned char[]> data(new unsigned char[dialog.bytes()]);
     fin.read(reinterpret_cast<char*>(data.get()), dialog.bytes());
-    auto volume = std::make_shared<Volume>(data, dialog.type(), dialog.w(), dialog.h(), dialog.d(), 1, 1, 1);
+    auto volume = std::make_shared<Volume>(data, dialog.type(), 1, dialog.w(), dialog.h(), dialog.d(), 1, 1, 1);
     return volume;
 }
 
-std::shared_ptr<Volume> VolLoadRAW::open(IVolume::DataType type, int w, int h, int d)
+std::shared_ptr<Volume> VolLoadRAW::open(IVolume::ScalarType type, int w, int h, int d)
 {
     std::ifstream fin(filename.c_str(), std::ifstream::binary);
     if (!fin) return nullptr;
-    std::map<IVolume::DataType, size_t> type2size
-            = { { IVolume::DT_Char, sizeof(char) },
-                { IVolume::DT_Unsigned_Char, sizeof(unsigned char) },
-                { IVolume::DT_Float, sizeof(float) },
-                { IVolume::DT_Double, sizeof(double) } };
+    std::map<IVolume::ScalarType, size_t> type2size
+            = { { IVolume::ST_Char, sizeof(char) },
+                { IVolume::ST_Unsigned_Char, sizeof(unsigned char) },
+                { IVolume::ST_Float, sizeof(float) },
+                { IVolume::ST_Double, sizeof(double) } };
     size_t bytes = w * h * d * type2size[type];
     std::unique_ptr<unsigned char[]> data(new unsigned char [bytes]);
     fin.read(reinterpret_cast<char*>(data.get()), bytes);
-    auto volume = std::make_shared<Volume>(data, type, w, h, d, 1, 1, 1);
+    auto volume = std::make_shared<Volume>(data, type, 1, w, h, d, 1, 1, 1);
     return volume;
 }
 

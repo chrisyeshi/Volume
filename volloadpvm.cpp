@@ -33,13 +33,14 @@ std::shared_ptr<Volume> VolLoadPVM::open()
                          &scalex, &scaley, &scalez));
     if (!data)
         return nullptr;
-    static std::map<unsigned int, Volume::DataType> components2datatype
-            = {{4, Volume::DT_Float},
-               {8, Volume::DT_Double},
-               {1, Volume::DT_Unsigned_Char}};
+    static std::map<unsigned int, Volume::ScalarType> components2datatype
+            = {{4, Volume::ST_Float},
+               {8, Volume::ST_Double},
+               {1, Volume::ST_Unsigned_Char}};
     if (0 == components2datatype.count(components))
         return nullptr;
-    auto volume = std::make_shared<Volume>(data, components2datatype[components],
+    auto volume = std::make_shared<Volume>(data,
+           components2datatype[components], 1,
            width, height, depth,
            scalex, scaley, scalez);
     return volume;

@@ -26,7 +26,7 @@ std::shared_ptr<Volume> VolLoadHDR::open()
     dimensions = readDimensions();
     std::string datapath = getDataFilePath();
     VolLoadRAW rawLoader(getDataFilePath());
-    return rawLoader.open(IVolume::DT_Unsigned_Char, dimensions[0], dimensions[1], dimensions[2]);
+    return rawLoader.open(IVolume::ST_Unsigned_Char, dimensions[0], dimensions[1], dimensions[2]);
 }
 
 std::vector<int> VolLoadHDR::readDimensions() const

@@ -50,7 +50,7 @@ std::shared_ptr<Volume> VolLoadHDF5::open()
     dset.getSpace().getSimpleExtentDims(dims);
     std::unique_ptr<unsigned char[]> data(new unsigned char[dims[0] * dims[1] * dims[2] * H5::PredType(H5::PredType::NATIVE_FLOAT).getSize()]);
     dset.read(data.get(), H5::PredType(H5::PredType::NATIVE_FLOAT));
-    auto volume = std::make_shared<Volume>(data, Volume::DT_Float, dims[0], dims[1], dims[2], 1, 1, 1);
+    auto volume = std::make_shared<Volume>(data, Volume::ST_Float, 1, dims[0], dims[1], dims[2], 1, 1, 1);
     return volume;
 }
 
