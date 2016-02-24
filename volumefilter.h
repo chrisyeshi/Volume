@@ -8,7 +8,7 @@ namespace yy {
 class IVolumeFilter : public virtual IVolume
 {
 public:
-    enum Filter { Filter_Linear, Filter_Nearest };
+    enum Filter { Filter_Linear, Filter_Nearest, Filter_Cubic };
 
 public:
     virtual void setFilter(Filter filter) = 0;
@@ -33,7 +33,7 @@ public:
     virtual const std::unique_ptr<unsigned char []>& getData() const { return volume->getData(); }
     virtual void normalized() { volume->normalized(); }
 	virtual void setFilter(Filter filter) { this->filter = filter; }
-	virtual Filter getFilter() const { return filter; }
+    virtual Filter getFilter() const { return filter; }
 
 private:
 	std::shared_ptr<IVolume> volume;

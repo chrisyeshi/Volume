@@ -5,7 +5,8 @@ namespace yy {
 
 std::map<VolumeGL::Filter, QOpenGLTexture::Filter> VolumeGL::filter2qgl
         = { { IVolumeFilter::Filter_Linear, QOpenGLTexture::Linear },
-            { IVolumeFilter::Filter_Nearest, QOpenGLTexture::Nearest } };
+            { IVolumeFilter::Filter_Nearest, QOpenGLTexture::Nearest },
+            { IVolumeFilter::Filter_Cubic, QOpenGLTexture::Linear } };
 
 VolumeGL::VolumeGL(const std::shared_ptr<IVolume>& volume)
 {
